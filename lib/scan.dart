@@ -71,7 +71,7 @@ class _MyScanState extends State<MyScan> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Nigger',
+              'Gorlock',
             ),
             Text(
               '$_counter',
