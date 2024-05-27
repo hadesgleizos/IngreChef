@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main/recipes.dart';
 import 'package:main/scan.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -59,7 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyRecipes(title: '_MyRecipeState',)));},
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
                           foregroundColor: MaterialStateProperty.all(Colors.black),
