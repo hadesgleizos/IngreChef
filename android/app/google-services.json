@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "989044489106",
+    "project_id": "ingre-chef",
+    "storage_bucket": "ingre-chef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989044489106:android:40db422c6e6b0b96e4df4b",
+        "android_client_info": {
+          "package_name": "com.sleepfalse.ingrechef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA82r475Vl-GhyR3GU3mcfth4u2wGkkSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
