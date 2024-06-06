@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'home.dart';
 import 'login_screen.dart';
 
 final scaffoldKey = GlobalKey<ScaffoldState>();
