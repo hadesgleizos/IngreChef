@@ -62,12 +62,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyRecipes(title: '_MyRecipeState',)));},
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyRecipes(
+                                        title: '_MyRecipeState',
+                                      )));
+                        },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-                          foregroundColor: MaterialStateProperty.all(Colors.black),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFF1F1F1)),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.black),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
                             horizontal: 32.0,
                             vertical: 16.0,
                           )),
@@ -81,7 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           elevation: MaterialStateProperty.all(0),
-                          shadowColor: MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -106,13 +114,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyScan(title: '_MyScanState',)));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyScan(
+                                        title: '_MyScanState',
+                                      )));
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-                          foregroundColor: MaterialStateProperty.all(Colors.black),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFF1F1F1)),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.black),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
                             horizontal: 48.0,
                             vertical: 16.0,
                           )),
@@ -126,7 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           elevation: MaterialStateProperty.all(0),
-                          shadowColor: MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

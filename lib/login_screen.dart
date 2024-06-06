@@ -3,28 +3,16 @@ import 'package:flutter/gestures.dart';
 import 'registration_screen.dart'; // Ensure this file exists
 import 'home.dart'; // Ensure this file exists
 
-void main() {
-  runApp(const MyApp());
-}
+class MyApp extends StatefulWidget {
+  const MyApp({super.key, required this.title});
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'IngreChef',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginScreen(),
-    );
-  }
+  State<MyApp> createState() => LoginScreen();
 }
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
+class LoginScreen extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +75,8 @@ class LoginScreen extends StatelessWidget {
                         ..onTap = () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()),
                           );
                         },
                     ),
@@ -100,7 +89,9 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Homepage')),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const MyHomePage(title: 'Homepage')),
                   );
                 },
                 child: const Text('Login'),
