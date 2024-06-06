@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/recipes.dart';
 import 'package:main/scan.dart';
+import 'package:main/settings.dart'; // Import the settings page
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -19,6 +20,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: GlobalKey<ScaffoldState>(),
       backgroundColor: const Color(0xFFF1F1F1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF1F1F1),
+        automaticallyImplyLeading: false, //just for the back button
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsPage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         top: true,
         child: Stack(
@@ -62,12 +78,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyRecipes(title: '_MyRecipeState',)));},
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyRecipes(
+                                        title: '_MyRecipeState',
+                                      )));
+                        },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-                          foregroundColor: MaterialStateProperty.all(Colors.black),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFF1F1F1)),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.black),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
                             horizontal: 32.0,
                             vertical: 16.0,
                           )),
@@ -81,7 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           elevation: MaterialStateProperty.all(0),
-                          shadowColor: MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -106,13 +130,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyScan(title: '_MyScanState',)));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyScan(
+                                        title: '_MyScanState',
+                                      )));
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-                          foregroundColor: MaterialStateProperty.all(Colors.black),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFF1F1F1)),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.black),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
                             horizontal: 48.0,
                             vertical: 16.0,
                           )),
@@ -126,7 +156,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           elevation: MaterialStateProperty.all(0),
-                          shadowColor: MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'home.dart';
+import 'login_screen.dart';
 
 final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -18,29 +18,32 @@ class _SplashState extends State<Splash> {
     _navigatehome();
   }
 
-  _navigatehome()async{
+  _navigatehome() async {
     await Future.delayed(Duration(milliseconds: 5000), () {});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage(title: 'Homepage',)));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyApp(
+                  title: 'Homepage',
+                )));
   }
-
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         child: FadeIn(
+      animate: true,
+      duration: Duration(seconds: 1),
+      child: FadeOut(
         animate: true,
-        duration: Duration(seconds: 1),
-    child: FadeOut(
-    animate: true,
-    delay: Duration(milliseconds: 3500),
-    duration: Duration(seconds: 5),
-
+        delay: Duration(milliseconds: 3500),
+        duration: Duration(seconds: 5),
         child: Scaffold(
-            key: scaffoldKey,
-            backgroundColor: Color(0xFFF1F1F1),
-            drawer: Drawer(
-              elevation: 16,
-            ),
+          key: scaffoldKey,
+          backgroundColor: Color(0xFFF1F1F1),
+          drawer: Drawer(
+            elevation: 16,
+          ),
           body: SafeArea(
             top: true,
             child: Stack(
@@ -56,21 +59,21 @@ class _SplashState extends State<Splash> {
                     ),
                   ),
                 ),
-          Align(
-            alignment: AlignmentDirectional(-0.09, -0.21),
-            child: Text(
-              'IngreChef',
-              style: TextStyle(
-                fontFamily: 'GreatVibes',
-                fontSize: 60,
-              ),
-            ),
-          ),
+                Align(
+                  alignment: AlignmentDirectional(-0.09, -0.21),
+                  child: Text(
+                    'IngreChef',
+                    style: TextStyle(
+                      fontFamily: 'GreatVibes',
+                      fontSize: 60,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-    ),)
-    );
+      ),
+    ));
   }
 }
