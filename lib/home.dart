@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main/recipes.dart';
 import 'package:main/scan.dart';
+import 'package:main/settings.dart'; // Import the settings page
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -19,6 +20,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: GlobalKey<ScaffoldState>(),
       backgroundColor: const Color(0xFFF1F1F1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF1F1F1),
+        automaticallyImplyLeading: false, //just for the back button
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsPage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         top: true,
         child: Stack(
