@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'login_screen.dart';
+import 'package:main/Auth/widget_tree.dart';
 
 final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -23,8 +23,7 @@ class _SplashState extends State<Splash> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => MyApp(
-                  title: 'Homepage',
+            builder: (context) => testWidgetTree(
                 )));
   }
 

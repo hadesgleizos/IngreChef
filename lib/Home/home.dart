@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:main/recipes.dart';
-import 'package:main/scan.dart';
-import 'package:main/settings.dart'; // Import the settings page
+import 'package:main/Home/recipes.dart';
+import 'package:main/Home/scan.dart';
+import 'package:main/Home/settings.dart'; // Import the settings page
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     print('Building MyHomePage');

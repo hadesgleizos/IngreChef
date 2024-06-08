@@ -1,18 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'registration_screen.dart'; // Ensure this file exists
-import 'home.dart'; // Ensure this file exists
+import '../Auth/registration_screen.dart'; // Ensure this file exists
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main/Auth/auth.dart';
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.title});
-
-  final String title;
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => LoginScreen();
+  State<Login> createState() => _LoginState();
 }
 
-class LoginScreen extends State<MyApp> {
+class _LoginState extends State<Login>{
+  String? errorMessage = '';
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
+
+  Widget _entryField(
+      String title,
+      TextEditingController controller,
+      ){
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: title,
+      ),
+    );
+  }
+
+  Widget _errorMessage(){
+    return Text(errorMessage == '' ? '' : 'Humm ? $errorMessage');
+  }
+
+  Widget _submitButton() {
+    return ElevatedButton(
+        onPressed:
+        signInWithEmailAndPassword,
+        child: Text('Login'),
+        style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
+        foregroundColor: MaterialStateProperty.all(Colors.black),
+        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+          horizontal: 32.0,
+          vertical: 16.0,
+        )),
+        shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+        side: const BorderSide(
+        color: Colors.black,
+        width: 1.0,),),),),);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,20 +93,13 @@ class LoginScreen extends State<MyApp> {
               ),
               const SizedBox(height: 40),
               // Username Text Field
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Username',
-                ),
+              _entryField(
+                  'Email', _emailController
               ),
               const SizedBox(height: 20),
               // Password Text Field
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                ),
+            _entryField(
+                'Password', _passwordController
               ),
               const SizedBox(height: 10),
               // Register Text
@@ -76,26 +123,17 @@ class LoginScreen extends State<MyApp> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()),
+                                builder: (context) => const Register()),
                           );
                         },
                     ),
                   ],
                 ),
               ),
+              _errorMessage(),
               const SizedBox(height: 40),
               // Login Button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const MyHomePage(title: 'Homepage')),
-                  );
-                },
-                child: const Text('Login'),
-              ),
+              _submitButton()
             ],
           ),
         ),
@@ -103,3 +141,4 @@ class LoginScreen extends State<MyApp> {
     );
   }
 }
+
