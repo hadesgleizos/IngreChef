@@ -16,12 +16,13 @@ class _RegisterState extends State<Register>{
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> createUserWithEmailAndPassword() async {
+  Future<void> createUserWithEmailAndPassword(BuildContext context) async {
     try {
       await Auth().createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -48,8 +49,8 @@ class _RegisterState extends State<Register>{
 
   Widget _submitButton() {
     return ElevatedButton(
-      onPressed:
-      createUserWithEmailAndPassword,
+      onPressed: () =>
+      createUserWithEmailAndPassword(context),
       child: Text('Register'),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
@@ -92,7 +93,7 @@ class _RegisterState extends State<Register>{
             _entryField('Password', _passwordController),
             _errorMessage(),
             const SizedBox(height: 20),
-            _submitButton()
+            _submitButton(),
           ],
         ),
       ),
