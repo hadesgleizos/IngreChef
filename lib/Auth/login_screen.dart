@@ -11,11 +11,12 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login>{
+class _LoginState extends State<Login> {
   String? errorMessage = '';
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -30,29 +31,39 @@ class _LoginState extends State<Login>{
     }
   }
 
-  Widget _entryField(
-      String title,
-      TextEditingController controller,
-      ){
+  Widget _entryField(String title, TextEditingController controller,
+      {bool isPassword = false}) {
     return TextField(
       controller: controller,
+      obscureText: isPassword ? _obscureText : false,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: title,
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+            : null,
       ),
     );
   }
 
-  Widget _errorMessage(){
+  Widget _errorMessage() {
     return Text(errorMessage == '' ? '' : 'Humm ? $errorMessage');
   }
 
   Widget _submitButton() {
     return ElevatedButton(
-        onPressed:
-        signInWithEmailAndPassword,
-        child: Text('Login'),
-        style: ButtonStyle(
+      onPressed: signInWithEmailAndPassword,
+      child: Text('Login'),
+      style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         foregroundColor: MaterialStateProperty.all(Colors.black),
         padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
@@ -60,11 +71,16 @@ class _LoginState extends State<Login>{
           vertical: 16.0,
         )),
         shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-        side: const BorderSide(
-        color: Colors.black,
-        width: 1.0,),),),),);
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            side: const BorderSide(
+              color: Colors.black,
+              width: 1.0,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -93,13 +109,13 @@ class _LoginState extends State<Login>{
               ),
               const SizedBox(height: 40),
               // Username Text Field
-              _entryField(
-                  'Email', _emailController
-              ),
+              _entryField('Email', _emailController),
               const SizedBox(height: 20),
               // Password Text Field
-            _entryField(
-                'Password', _passwordController
+              _entryField(
+                'Password',
+                _passwordController,
+                isPassword: true,
               ),
               const SizedBox(height: 10),
               // Register Text
@@ -141,4 +157,3 @@ class _LoginState extends State<Login>{
     );
   }
 }
-
