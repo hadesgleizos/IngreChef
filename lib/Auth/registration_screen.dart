@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:main/Auth/auth.dart';
 
-
-class Register extends StatefulWidget{
+class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register>{
+class _RegisterState extends State<Register> {
   String? errorMessage = '';
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true; // Initially password is obscured
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   Future<void> createUserWithEmailAndPassword(BuildContext context) async {
     try {
@@ -31,40 +37,57 @@ class _RegisterState extends State<Register>{
   }
 
   Widget _entryField(
-      String title,
-      TextEditingController controller,
-      ){
+    String title,
+    TextEditingController controller,
+  ) {
     return TextField(
       controller: controller,
+      obscureText: title == 'Password'
+          ? _obscureText
+          : false, // Check if it's a password field
       decoration: InputDecoration(
         labelText: title,
         border: OutlineInputBorder(),
+        suffixIcon: title == 'Password'
+            ? IconButton(
+                icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off),
+                onPressed: _togglePasswordVisibility,
+              )
+            : null,
       ),
     );
   }
 
-  Widget _errorMessage(){
-    return Text(errorMessage == '' ? '' : 'Humm ? $errorMessage');
+  Widget _errorMessage() {
+    return Text(
+      errorMessage == '' ? '' : '$errorMessage',
+      style: TextStyle(
+        color: Colors.red, // Set error message color to red
+      ),
+    );
   }
 
   Widget _submitButton() {
     return ElevatedButton(
-      onPressed: () =>
-      createUserWithEmailAndPassword(context),
+      onPressed: () => createUserWithEmailAndPassword(context),
       child: Text('Register'),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         foregroundColor: MaterialStateProperty.all(Colors.black),
         padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 32.0,
-          vertical: 16.0,
+          horizontal: 150.0,
+          vertical: 18.0,
         )),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            side: const BorderSide(
-              color: Colors.black,
-              width: 1.0,),),),),);
+            borderRadius: BorderRadius.circular(5.0),
+            side: BorderSide.none, // Remove the border
+          ),
+        ),
+        elevation: MaterialStateProperty.all(2), // Add shadow
+      ),
+    );
   }
 
   @override

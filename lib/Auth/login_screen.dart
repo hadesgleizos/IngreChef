@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import '../Auth/registration_screen.dart'; // Ensure this file exists
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:main/Auth/auth.dart';
+import 'package:main/Home/forgot.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -56,7 +57,12 @@ class _LoginState extends State<Login> {
   }
 
   Widget _errorMessage() {
-    return Text(errorMessage == '' ? '' : 'Humm ? $errorMessage');
+    return Text(
+      errorMessage == '' ? '' : ' $errorMessage',
+      style: TextStyle(
+        color: Colors.red, // Set error message color to red
+      ),
+    );
   }
 
   Widget _submitButton() {
@@ -67,18 +73,64 @@ class _LoginState extends State<Login> {
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         foregroundColor: MaterialStateProperty.all(Colors.black),
         padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 32.0,
+          horizontal: 180.0,
           vertical: 16.0,
         )),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-            side: const BorderSide(
-              color: Colors.black,
-              width: 1.0,
-            ),
+            borderRadius: BorderRadius.circular(5.0),
+            side: BorderSide.none, // Remove the border
           ),
         ),
+        elevation: MaterialStateProperty.all(2), // Add shadow
+      ),
+    );
+  }
+
+  Widget _forgotPassword() {
+    return RichText(
+      text: TextSpan(
+        text: 'Forgot Password?',
+        style: const TextStyle(
+          color: Colors.blue,
+          fontSize: 15.0,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ForgotPage()),
+            );
+          },
+      ),
+    );
+  }
+
+  Widget _registerLink() {
+    return RichText(
+      text: TextSpan(
+        text: 'No account? ',
+        style: const TextStyle(
+          fontSize: 13.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+            text: 'Click here to register',
+            style: const TextStyle(
+              color: Colors.blue,
+              fontStyle: FontStyle.italic,
+              fontSize: 15.0,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Register()),
+                );
+              },
+          ),
+        ],
       ),
     );
   }
@@ -88,7 +140,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,36 +170,16 @@ class _LoginState extends State<Login> {
                 isPassword: true,
               ),
               const SizedBox(height: 10),
-              // Register Text
-              RichText(
-                text: TextSpan(
-                  text: 'No account? ',
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Click here to register',
-                      style: const TextStyle(
-                        color: Colors.blue,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 12.0,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Register()),
-                          );
-                        },
-                    ),
-                  ],
-                ),
+              // Forgot Password and Register Links
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _forgotPassword(),
+                  _registerLink(),
+                ],
               ),
               _errorMessage(),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
               // Login Button
               _submitButton()
             ],
