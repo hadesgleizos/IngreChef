@@ -52,7 +52,7 @@ class ForgotPage extends StatelessWidget {
                 textStyle: MaterialStateProperty.all(
                   const TextStyle(
                       fontFamily: 'NanumGothic', // Custom Font
-                      fontSize: 20),
+                      fontSize: 18),
                 ),
                 foregroundColor: MaterialStateProperty.all(
                     Color.fromARGB(255, 51, 51, 51)), // Set text color to white
