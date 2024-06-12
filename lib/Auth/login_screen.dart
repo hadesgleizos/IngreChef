@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import '../Auth/registration_screen.dart'; // Ensure this file exists
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:main/Auth/auth.dart';
-import 'package:main/Home/forgot.dart';
+import 'package:main/Auth/forgot.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -73,7 +73,7 @@ class _LoginState extends State<Login> {
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         foregroundColor: MaterialStateProperty.all(Colors.black),
         padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 180.0,
+          horizontal: 170.0,
           vertical: 16.0,
         )),
         shape: MaterialStateProperty.all(

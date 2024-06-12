@@ -2,6 +2,8 @@ import 'package:main/Auth/auth.dart';
 import 'package:main/Home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:main/Auth/login_screen.dart';
+import 'Verification.dart';
+
 
 class testWidgetTree extends StatefulWidget {
   const testWidgetTree({Key? key}) : super(key: key);
@@ -16,10 +18,13 @@ class _testWidgetTreeState extends State<testWidgetTree>{
     return StreamBuilder(
         stream: Auth().authStateChanges,
         builder: (context, snapshot){
-          if (snapshot.hasData){
-            return MyHomePage();
+          if (snapshot.hasData == false){
+            return Login();
           } else {
-            return const Login();
+            if (snapshot.data?.emailVerified == true) { //set to false to bypass verification
+              return MyHomePage();
+            }
+            return const Verification();
           }
     },
     );

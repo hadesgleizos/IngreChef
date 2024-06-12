@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:main/Home/recipes.dart';
 import 'package:main/Home/scan.dart';
-import 'package:main/Home/settings.dart'; // Import the settings page
+import 'package:main/Home/settings.dart';
+
+import '../fetchUI.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -163,6 +165,52 @@ class MyHomePage extends StatelessWidget {
                             const SizedBox(width: 8.0),
                             Text(
                               'Scan Now',
+                              style: TextStyle(
+                                fontFamily: 'NanumGothic', // Custom Font
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RecipeListScreen(
+                                  )));
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFF1F1F1)),
+                          foregroundColor:
+                          MaterialStateProperty.all(Colors.black),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
+                                horizontal: 48.0,
+                                vertical: 16.0,
+                              )),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                              side: const BorderSide(
+                                color: Colors.black,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          elevation: MaterialStateProperty.all(0),
+                          shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'Test',
                               style: TextStyle(
                                 fontFamily: 'NanumGothic', // Custom Font
                                 fontSize: 20,

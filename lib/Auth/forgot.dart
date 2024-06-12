@@ -1,19 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'auth.dart';
 
-class ForgotPage extends StatelessWidget {
+class ForgotPage extends StatefulWidget {
   const ForgotPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController _emailController = TextEditingController();
+  State<ForgotPage> createState() => _ForgotPageState();
+}
 
-    void _resetPassword() {
-      // implement the password reset functionality here
-      // for example, you might want to call Firebase's password reset function
-      final String email = _emailController.text;
-      // perform password reset operation
-      // example: FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+class _ForgotPageState extends State<ForgotPage> {
+  String? errorMessage = '';
+
+  final TextEditingController _emailController = TextEditingController();
+
+  Future<void> sendPasswordResetEmail() async {
+    try {
+      await Auth().sendPasswordResetEmail(
+        email: _emailController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
     }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: const Color(
@@ -41,8 +56,8 @@ class ForgotPage extends StatelessWidget {
             const SizedBox(height: 20),
             // Next Button
             ElevatedButton(
-              onPressed: _resetPassword,
-              child: const Text('Next'),
+              onPressed: sendPasswordResetEmail,
+              child: const Text('Reset'),
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(const Color(0xFFF1F1F1)),

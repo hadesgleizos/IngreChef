@@ -14,11 +14,25 @@ class Auth {
     await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
   }
 
+  Future<void> sendEmailVerificationLink()async{
+    try{
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+    }catch (e){
+      print(e.toString());
+    }
+  }
+
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future<void> sendPasswordResetEmail({
+    required String email,
+}) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> signOut() async {
