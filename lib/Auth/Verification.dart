@@ -38,20 +38,15 @@ class _VerificationState extends State<Verification> {
       child: const Text(
         'Resend Email',
         style: TextStyle(
-          fontWeight: FontWeight.bold, // Make the text bold
-          color: Color.fromARGB(255, 85, 85, 85), // Set text color to black
+          // fontWeight: FontWeight.bold, // bold text
+          color: Colors.black, // Set text color to black
+          fontFamily: 'NanumGothic', // Custom Font
         ),
       ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         padding: MaterialStateProperty.all(
           const EdgeInsets.symmetric(vertical: 16.0),
-        ),
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(
-            fontFamily: 'NanumGothic', // Custom Font
-            fontSize: 12,
-          ),
         ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
@@ -69,12 +64,6 @@ class _VerificationState extends State<Verification> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify your email'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
