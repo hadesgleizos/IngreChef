@@ -5,41 +5,54 @@ import 'package:main/Auth/auth.dart';
 import 'package:main/Auth/widget_tree.dart';
 
 class Verification extends StatefulWidget {
-  const Verification ({Key? key}) : super(key: key);
+  const Verification({Key? key}) : super(key: key);
 
   @override
   State<Verification> createState() => _VerificationState();
-
 }
 
 class _VerificationState extends State<Verification> {
   final _auth = Auth();
   late Timer timer;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _auth.sendEmailVerificationLink();
-    timer = Timer.periodic(const Duration(seconds: 5), (timer){
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       FirebaseAuth.instance.currentUser?.reload();
-      if (FirebaseAuth.instance.currentUser!.emailVerified == true){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const testWidgetTree(),));
-    }
+      if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const testWidgetTree(),
+          ),
+        );
+      }
     });
   }
-
-
 
   Widget _resendButton() {
     return ElevatedButton(
       onPressed: () => _auth.sendEmailVerificationLink(),
-      child: Text('Resend Email'),
+      child: const Text(
+        'Resend Email',
+        style: TextStyle(
+          fontWeight: FontWeight.bold, // Make the text bold
+          color: Color.fromARGB(255, 85, 85, 85), // Set text color to black
+        ),
+      ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-        foregroundColor: MaterialStateProperty.all(Colors.black),
-        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 150.0,
-          vertical: 18.0,
-        )),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.symmetric(vertical: 16.0),
+        ),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(
+            fontFamily: 'NanumGothic', // Custom Font
+            fontSize: 12,
+          ),
+        ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
@@ -51,12 +64,17 @@ class _VerificationState extends State<Verification> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify your email'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,11 +85,16 @@ class _VerificationState extends State<Verification> {
               child: Text(
                 'We have sent you an email',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontFamily: 'NanumGothic', // Custom Font
+                  fontSize: 20,
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            _resendButton()],),),);
+            _resendButton(),
+          ],
+        ),
+      ),
+    );
   }
 }
