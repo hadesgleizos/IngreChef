@@ -76,6 +76,11 @@ class _LoginState extends State<Login> {
           horizontal: 170.0,
           vertical: 16.0,
         )),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(
+              fontFamily: 'NanumGothic', // Custom Font
+              fontSize: 18),
+        ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),

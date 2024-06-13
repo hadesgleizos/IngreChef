@@ -47,7 +47,7 @@ class _RegisterState extends State<Register> {
           : false, // Check if it's a password field
       decoration: InputDecoration(
         labelText: title,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         suffixIcon: title == 'Password'
             ? IconButton(
                 icon: Icon(
@@ -62,7 +62,7 @@ class _RegisterState extends State<Register> {
   Widget _errorMessage() {
     return Text(
       errorMessage == '' ? '' : '$errorMessage',
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.red, // Set error message color to red
       ),
     );
@@ -71,14 +71,19 @@ class _RegisterState extends State<Register> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: () => createUserWithEmailAndPassword(context),
-      child: Text('Register'),
+      child: const Text(
+        'Register',
+        style: TextStyle(
+          color: Colors.black, // Set text color to black
+          fontFamily: 'NanumGothic', // Custom Font
+          fontSize: 18,
+        ),
+      ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
-        foregroundColor: MaterialStateProperty.all(Colors.black),
-        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 150.0,
-          vertical: 18.0,
-        )),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.symmetric(vertical: 16.0),
+        ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),

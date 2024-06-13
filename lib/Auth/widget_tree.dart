@@ -20,7 +20,7 @@ class _testWidgetTreeState extends State<testWidgetTree> {
         if (snapshot.hasData == false) {
           return Login();
         } else {
-          if (snapshot.data?.emailVerified == true) {
+          if (snapshot.data?.emailVerified == false) {
             //set to false to bypass verification
             return MyHomePage();
           }
