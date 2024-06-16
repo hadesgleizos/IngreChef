@@ -19,6 +19,24 @@ class _ForgotPageState extends State<ForgotPage> {
       await Auth().sendPasswordResetEmail(
         email: _emailController.text,
       );
+      // display success dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Reset Password'),
+            content: Text('Email has been sent to ${_emailController.text}.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -26,10 +44,8 @@ class _ForgotPageState extends State<ForgotPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(
           0xFFF1F1F1), // Set the background color of the entire screen
