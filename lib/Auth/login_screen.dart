@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
         textStyle: MaterialStateProperty.all(
           const TextStyle(
               fontFamily: 'NanumGothic', // Custom Font
-              fontSize: 18),
+              fontSize: 17),
         ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(

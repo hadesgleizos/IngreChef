@@ -1,49 +1,63 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:main/scan_controller.dart';
+import 'package:main/Home/recommendations.dart'; // Import the new screen here
 
-class CameraButtonApp extends StatelessWidget {
-  const CameraButtonApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyScan(title: 'Camera Button App'),
-    );
-  }
-}
-
-class MyScan extends StatefulWidget {
-  const MyScan({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyScan> createState() => _MyScanState();
-}
-
-class _MyScanState extends State<MyScan> {
-  void _onCameraButtonPressed() {
-    print('Camera button pressed');
-  }
+class CameraView extends StatelessWidget {
+  const CameraView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _onCameraButtonPressed,
-          child: const Icon(
-            Icons.camera_alt,
-            size: 50,
-            color: Colors.white,
-          ),
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(20),
-            backgroundColor: Colors.black
-          ),
-        ),
+      body: GetBuilder<ScanController>(
+        init: ScanController(),
+        builder: (controller) {
+          return controller.isCameraInitialized.value
+              ? Stack(
+            children: [
+              CameraPreview(controller.cameraController),
+              Obx(() => Positioned(
+                top: controller.y.value * MediaQuery.of(context).size.height,
+                left: controller.x.value * MediaQuery.of(context).size.width,
+                child: Container(
+                  width: controller.w.value * MediaQuery.of(context).size.width,
+                  height: controller.h.value * MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.white, width: 4.0),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: Text(controller.label.value),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+              Positioned(
+                bottom: 16.0,
+                right: 16.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.cameraController.dispose();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AnotherScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text("Done"),
+                ),
+              ),
+            ],
+          )
+              : Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

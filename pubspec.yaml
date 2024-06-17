@@ -39,6 +39,13 @@ dependencies:
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
+  camera: ^0.10.5+9
+  permission_handler: ^11.3.1
+  tflite: ^1.1.2
+  get: ^4.6.6
+  image: ^4.2.0
+
+
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +70,8 @@ flutter:
      - assets/images/camera.png
      - assets/images/instagram.png
      - assets/images/photocamera.png
+     - assets/model.tflite
+     - assets/labels.txt
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

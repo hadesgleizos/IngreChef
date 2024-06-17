@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:main/firebase_options.dart';
 import 'package:main/splash.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

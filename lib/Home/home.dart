@@ -127,9 +127,8 @@ class MyHomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyScan(
-                                        title: '_MyScanState',
-                                      )));
+                                  builder: (context) => CameraView()
+                              ));
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(

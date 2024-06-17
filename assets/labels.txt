@@ -1,0 +1,12 @@
+0 Bell Pepper
+1 Eggplant
+2 Puso ng Saging
+3 Carrot
+4 Garlic
+5 Sitaw
+6 Green Chili Peppers
+7 Malunggay
+8 Onion
+9 Pechay
+10 Tomato
+11 Kangkong
