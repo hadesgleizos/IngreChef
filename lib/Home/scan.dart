@@ -47,7 +47,7 @@ class CameraView extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AnotherScreen(),
+                        builder: (context) => RecommendationPage(),
                       ),
                     );
                   },

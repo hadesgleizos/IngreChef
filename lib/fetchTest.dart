@@ -1,9 +1,47 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+class Recipes {
+  final String name;
+  final String description;
+  final String imageUrl;
+  final List<String> ingredients;
+  final String instructions;
+  final int prepTime;
+  final int cookTime;
+  final int totalTime;
 
-class FirestoreService {
 
-  final CollectionReference savedRecipes = FirebaseFirestore.instance.collection('SavedRecipe');
+  Recipes({
+    required this.name,
+    required this.description,
+    required this.imageUrl,
+    required this.ingredients,
+    required this.instructions,
+    required this.prepTime,
+    required this.cookTime,
+    required this.totalTime,
+  });
 
-  Future updateUserData(String name, String savedRecipe) async {}
+  Recipes.fromJson(Map<String, Object?> json)
+      : name = json['name'] as String? ?? '',
+        description = json['description'] as String? ?? '',
+        imageUrl = json['imageUrl'] as String? ?? '',
+        ingredients = (json['ingredients'] as List<dynamic>? ?? []).map((item) => item as String).toList(),
+        instructions = json['instructions'] as String? ?? '',
+        prepTime = json['prepTime'] as int? ?? 0,
+        cookTime = json['cookTime'] as int? ?? 0,
+        totalTime = json['totalTime'] as int? ?? 0;
+
+
+  Map<String, Object?> toJson(){
+    return {
+      'name':name,
+      'description':description,
+      'imageUrl': imageUrl,
+      'ingredients': ingredients,
+      'instructions':instructions,
+      'prepTime':prepTime,
+      'cookTime':cookTime,
+      'totalTime':totalTime,
+    };
+  }
 
 }
