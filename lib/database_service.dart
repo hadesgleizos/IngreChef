@@ -34,19 +34,19 @@ class DatabaseService {
     }
   }
 
-  Stream<List<String>> getSavedRecipeIds(String userId) {
+  Future<List<String>> getSavedRecipeIds(String userId) async {
     try {
       DocumentReference userDocRef = _usersRef.doc(userId);
-      return userDocRef.snapshots().map((snapshot) {
-        if (snapshot.exists) {
-          List<String> savedRecipes =
-          List<String>.from(snapshot.get(SAVED_RECIPES_FIELD) ?? []);
-          print('Fetched saved recipes for user $userId: $savedRecipes');
-          return savedRecipes;
-        } else {
-          return [];
-        }
-      });
+      DocumentSnapshot userDocSnapshot = await userDocRef.get();
+
+      if (userDocSnapshot.exists) {
+        List<String> savedRecipes =
+        List<String>.from(userDocSnapshot.get(SAVED_RECIPES_FIELD) ?? []);
+        print('Fetched saved recipes for user $userId: $savedRecipes');
+        return savedRecipes;
+      } else {
+        return [];
+      }
     } catch (e) {
       print('Error getting saved recipes: $e');
       throw e;
@@ -56,8 +56,12 @@ class DatabaseService {
   Future<List<Recipes>> getRecipesByIds(List<String> recipeIds) async {
     try {
       List<Future<Recipes?>> futures = recipeIds.map((recipeId) async {
-        DocumentSnapshot doc = await _recipesRef.doc(recipeId).get();
-        if (doc.exists) {
+        QuerySnapshot querySnapshot = await _recipesRef
+            .where('recipeId', isEqualTo: recipeId)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          var doc = querySnapshot.docs.first;
           return Recipes.fromJson(doc.data() as Map<String, dynamic>);
         } else {
           print('No recipe found with ID $recipeId');
