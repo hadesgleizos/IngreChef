@@ -3,10 +3,12 @@ class Recipes {
   final String description;
   final String imageUrl;
   final List<String> ingredients;
+  final List<String> scannables;
   final String instructions;
   final int prepTime;
   final int cookTime;
   final int totalTime;
+  final String recipeId;
 
 
   Recipes({
@@ -15,9 +17,11 @@ class Recipes {
     required this.imageUrl,
     required this.ingredients,
     required this.instructions,
+    required this.scannables,
     required this.prepTime,
     required this.cookTime,
     required this.totalTime,
+    required this.recipeId,
   });
 
   Recipes.fromJson(Map<String, Object?> json)
@@ -25,10 +29,12 @@ class Recipes {
         description = json['description'] as String? ?? '',
         imageUrl = json['imageUrl'] as String? ?? '',
         ingredients = (json['ingredients'] as List<dynamic>? ?? []).map((item) => item as String).toList(),
+        scannables = (json['scannables'] as List<dynamic>? ?? []).map((item) => item as String).toList(),
         instructions = json['instructions'] as String? ?? '',
         prepTime = json['prepTime'] as int? ?? 0,
         cookTime = json['cookTime'] as int? ?? 0,
-        totalTime = json['totalTime'] as int? ?? 0;
+        totalTime = json['totalTime'] as int? ?? 0,
+        recipeId = json['recipeId'] as String? ?? '';
 
 
   Map<String, Object?> toJson(){
@@ -37,10 +43,12 @@ class Recipes {
       'description':description,
       'imageUrl': imageUrl,
       'ingredients': ingredients,
+      'scannables': scannables,
       'instructions':instructions,
       'prepTime':prepTime,
       'cookTime':cookTime,
       'totalTime':totalTime,
+      'recipeId':recipeId,
     };
   }
 

@@ -73,7 +73,6 @@ class _ForgotPageState extends State<ForgotPage> {
             // Next Button
             ElevatedButton(
               onPressed: sendPasswordResetEmail,
-              child: const Text('Reset'),
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(const Color(0xFFF1F1F1)),
@@ -86,7 +85,7 @@ class _ForgotPageState extends State<ForgotPage> {
                       fontSize: 18),
                 ),
                 foregroundColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 51, 51, 51)), // Set text color to white
+                    const Color.fromARGB(255, 51, 51, 51)), // Set text color to white
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -95,6 +94,7 @@ class _ForgotPageState extends State<ForgotPage> {
                 ),
                 elevation: MaterialStateProperty.all(4), // Add shadow
               ),
+              child: const Text('Reset'),
             ),
           ],
         ),

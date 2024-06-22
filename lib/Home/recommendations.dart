@@ -1,62 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:main/database_service.dart';
-import 'package:main/fetchTest.dart';
+import 'package:main/Database_Service.dart'; // Import the DatabaseService
+import 'package:main/fetchTest.dart'; // Import the Recipes class
+import 'package:main/Home/RecipeDetails.dart'; // Import the RecipeDetailPage
 
 class RecommendationPage extends StatefulWidget {
-  const RecommendationPage({super.key});
+  final List<String> scannedIngredients;
+
+  const RecommendationPage({Key? key, required this.scannedIngredients})
+      : super(key: key);
 
   @override
-  State<RecommendationPage> createState() => _RecommendationPageState();
+  _RecommendationPageState createState() => _RecommendationPageState();
 }
 
-class _RecommendationPageState extends State<RecommendationPage>{
-  final DatabaseService _databaseService = DatabaseService();
-
-  Widget _build(){
-    return SafeArea(
-        child: Column(
-          children: [
-            _messagesListView(),
-          ],
-        )
-    );
-  }
-
-  Widget _messagesListView() {
-    return SizedBox(
-      height: MediaQuery.sizeOf(context).height * 0.80,
-      width: MediaQuery.sizeOf(context).width,
-      child:StreamBuilder(
-        stream: _databaseService.getRecipes(),
-        builder: (context, snapshot) {
-          List recipes = snapshot.data?.docs??[];
-          if (recipes.isEmpty){
-            return const Center(
-              child: Text("No Recipes Found"),
-            );
-          }
-          print(recipes);
-          return ListView.builder(
-              itemCount: recipes.length,
-              itemBuilder: (context, index){
-                Recipes recipe = recipes[index].data();
-                String recipesId = recipes[index].id;
-            return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 10,
-                ),
-              child: ListTile(
-                tileColor: Theme.of(context).colorScheme.primaryContainer,
-                title: Text(recipe.name),
-                subtitle: Text(recipe.description),
-              ),
-            );
-          });
-        }),
-    );
-  }
+class _RecommendationPageState extends State<RecommendationPage> {
+  List<Recipes> _recipes = [];
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +24,95 @@ class _RecommendationPageState extends State<RecommendationPage>{
       appBar: AppBar(
         title: Text("Recommendations"),
       ),
-      body: _build(),
-      );
+      body: StreamBuilder<List<Recipes>>(
+        stream: DatabaseService().getRecipes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No recipes found."));
+          }
+
+          _recipes = snapshot.data!;
+
+          var recommendationList = _recommendations(widget.scannedIngredients);
+
+          if (recommendationList.isEmpty) {
+            return Center(
+                child: Text("No recipes match the scanned ingredients."));
+
+          }
+
+          return ListView.builder(
+            itemCount: recommendationList.length,
+            itemBuilder: (context, index) {
+              var recipe = recommendationList[index];
+              return Card(
+                child: ListTile(
+                  title: Text(recipe.name),
+                  subtitle: Text(recipe.description),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecipeDetailPage(recipe: recipe),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  List<Recipes> _recommendations(List<String> scannedIngredients) {
+    List<Recipes> recommendedRecipes = [];
+
+    for (var recipe in _recipes) {
+      var similarity = calculateCosineSimilarity(
+          scannedIngredients, recipe.scannables);
+
+      // Adjust the similarity threshold as needed (0.5 is just an example)
+      if (similarity > 0.5) {
+        recommendedRecipes.add(recipe);
+      }
+
+      // Debugging logs
+      print('Recipe: ${recipe.name}');
+      print('Scannables: ${recipe.scannables}');
+      print('Similarity with scanned ingredients: $similarity');
+    }
+
+    // Sort recommended recipes by descending similarity score
+    recommendedRecipes.sort((a, b) =>
+        calculateCosineSimilarity(scannedIngredients, b.scannables)
+            .compareTo(calculateCosineSimilarity(scannedIngredients, a.scannables)));
+
+    // Debugging log for sorted list
+    print('Sorted Recommendation List:');
+    recommendedRecipes.forEach((recipe) {
+      print('${recipe.name} - Similarity: ${calculateCosineSimilarity(scannedIngredients, recipe.scannables)}');
+    });
+
+    return recommendedRecipes;
+  }
+
+  double calculateCosineSimilarity(List<String> list1, List<String> list2) {
+    var set1 = list1.toSet();
+    var set2 = list2.toSet();
+
+    var dotProduct = set1.intersection(set2).length;
+
+    var magnitude1 = sqrt(set1.length.toDouble());
+    var magnitude2 = sqrt(set2.length.toDouble());
+
+    var cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
+
+    return cosineSimilarity;
   }
 }

@@ -3,8 +3,6 @@ import 'package:main/Home/recipes.dart';
 import 'package:main/Home/scan.dart';
 import 'package:main/Home/settings.dart';
 
-import '../fetchUI.dart';
-
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -75,8 +73,7 @@ class MyHomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyRecipes(
-                                        title: '_MyRecipeState',
+                                  builder: (context) => const SavedRecipesPage(
                                       )));
                         },
                         style: ButtonStyle(

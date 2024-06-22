@@ -6,7 +6,7 @@ import 'package:main/Auth/auth.dart';
 import 'package:main/Auth/forgot.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -38,7 +38,7 @@ class _LoginState extends State<Login> {
       controller: controller,
       obscureText: isPassword ? _obscureText : false,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: title,
         suffixIcon: isPassword
             ? IconButton(
@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
   Widget _errorMessage() {
     return Text(
       errorMessage == '' ? '' : ' $errorMessage',
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.red, // Set error message color to red
       ),
     );
@@ -68,18 +68,17 @@ class _LoginState extends State<Login> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: signInWithEmailAndPassword,
-      child: Text('Login'),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFF1F1F1)),
         foregroundColor: MaterialStateProperty.all(Colors.black),
         padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-          horizontal: 170.0,
+          horizontal: 140.0,
           vertical: 16.0,
         )),
         textStyle: MaterialStateProperty.all(
           const TextStyle(
               fontFamily: 'NanumGothic', // Custom Font
-              fontSize: 17),
+              fontSize: 16),
         ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
@@ -89,6 +88,7 @@ class _LoginState extends State<Login> {
         ),
         elevation: MaterialStateProperty.all(2), // Add shadow
       ),
+      child: const Text('Login'),
     );
   }
 
@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
           ..onTap = () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ForgotPage()),
+              MaterialPageRoute(builder: (context) => const ForgotPage()),
             );
           },
       ),

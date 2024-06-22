@@ -2,10 +2,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:main/scan_controller.dart';
-import 'package:main/Home/recommendations.dart'; // Import the new screen here
+import 'package:main/Home/recommendations.dart';
 
 class CameraView extends StatelessWidget {
-  const CameraView({super.key});
+  const CameraView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +43,19 @@ class CameraView extends StatelessWidget {
                 right: 16.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    controller.cameraController.dispose();
+                    print('Scanned Ingredients: ${controller.ingredients}');
+                    // Navigate to RecommendationPage with scanned ingredients
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RecommendationPage(),
+                        builder: (context) => RecommendationPage(
+                          scannedIngredients: controller.ingredients,
+                        ),
                       ),
                     );
+
+                    // Dispose of the camera controller safely
+                    controller.disposeCameraController();
                   },
                   child: const Text("Done"),
                 ),

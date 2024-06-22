@@ -58,7 +58,7 @@ class _SplashState extends State<Splash> {
                     ),
                   ),
                 ),
-                Align(
+                 const Align(
                   alignment: AlignmentDirectional(-0.09, -0.21),
                   child: Text(
                     'IngreChef',

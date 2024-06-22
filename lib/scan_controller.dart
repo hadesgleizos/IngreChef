@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,12 +10,15 @@ class ScanController extends GetxController {
   var cameraCount = 0;
   var isCameraInitialized = false.obs;
 
-  // Observable variables
   var x = 0.0.obs;
   var y = 0.0.obs;
   var w = 1.0.obs;
   var h = 1.0.obs;
   var label = ''.obs;
+
+  var ingredients = <String>[].obs;
+
+  var isDisposed = false;
 
   @override
   void onInit() {
@@ -24,28 +28,37 @@ class ScanController extends GetxController {
   }
 
   @override
-  void dispose() {
+  void onClose() {
+    disposeCameraController();
     unloadModel();
-    if (cameraController.value.isInitialized) {
-      cameraController.stopImageStream();
-      cameraController.dispose();
-    }
-    super.dispose();
+    super.onClose();
   }
 
   Future<void> initCamera() async {
-    if (await Permission.camera.request().isGranted) {
+    if (await Permission.camera
+        .request()
+        .isGranted) {
+      // Get the list of all cameras
       cameras = await availableCameras();
+
+      // Find the rear camera (assuming there is at least one camera)
       CameraDescription rearCamera = cameras.firstWhere(
             (camera) => camera.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
+
+      // Initialize the CameraController with the rear camera
       cameraController = CameraController(
         rearCamera,
         ResolutionPreset.max,
       );
+
+      // Initialize the camera controller
       await cameraController.initialize();
-      cameraController.startImageStream((image) {
+
+      // Start streaming images from the camera
+      cameraController.startImageStream((CameraImage image) {
+        if (isDisposed) return;
         cameraCount++;
         if (cameraCount % 10 == 0) {
           cameraCount = 0;
@@ -53,12 +66,15 @@ class ScanController extends GetxController {
         }
         update();
       });
+
+      // Mark camera as initialized
       isCameraInitialized(true);
       update();
     } else {
       print("Permission denied");
     }
   }
+
 
   Future<void> initTflite() async {
     try {
@@ -76,29 +92,34 @@ class ScanController extends GetxController {
 
   Future<void> objectDetector(CameraImage image) async {
     try {
-      var detector = await Tflite.runModelOnFrame(
+      var recognitions = await Tflite.runModelOnFrame(
         bytesList: image.planes.map((plane) {
           return plane.bytes;
         }).toList(),
-        asynch: true,
         imageHeight: image.height,
         imageWidth: image.width,
-        imageMean: 127.5,
-        imageStd: 127.5,
-        rotation: 90,
         numResults: 5,
         threshold: 0.4,
+        rotation: 90,
       );
 
-      if (detector != null && detector.isNotEmpty) {
-        var firstResult = detector[0];
-        var rect = firstResult['rect'] ?? {};
+      if (recognitions != null && recognitions.isNotEmpty) {
+        var recognition = recognitions.first;
+        var rect = recognition['rect'] ?? {};
 
         x.value = rect['x'] ?? 0.0;
         y.value = rect['y'] ?? 0.0;
         w.value = rect['w'] ?? 1.0;
         h.value = rect['h'] ?? 1.0;
-        label.value = firstResult['label'] ?? '';
+
+        var rawLabel = recognition['label'] ?? '';
+        var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
+
+        label.value = processedLabel;
+
+        if (!ingredients.contains(processedLabel)) {
+          ingredients.add(processedLabel);
+        }
       } else {
         x.value = 0.0;
         y.value = 0.0;
@@ -116,6 +137,17 @@ class ScanController extends GetxController {
       await Tflite.close();
     } catch (e) {
       print("Error closing TFLite model: $e");
+    }
+  }
+
+  void disposeCameraController() {
+    isDisposed = true;
+    if (cameraController.value.isInitialized) {
+      // Delay for 2 seconds before stopping and disposing
+      Timer(Duration(seconds: 2), () {
+        cameraController.stopImageStream();
+        cameraController.dispose();
+      });
     }
   }
 }
