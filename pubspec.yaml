@@ -70,8 +70,11 @@ flutter:
      - assets/images/camera.png
      - assets/images/instagram.png
      - assets/images/photocamera.png
+     - assets/model1.tflite
      - assets/model.tflite
+     - assets/labels(1).txt
      - assets/labels.txt
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

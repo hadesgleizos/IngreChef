@@ -1,0 +1,21 @@
+0 ampalaya
+1 bell pepper
+2 cabbage
+3 carrot
+4 eggplant
+5 garlic
+6 sitaw
+7 chili peppers
+8 kalabasa
+9 lettuce
+10 malunggay
+11 okra
+12 onion
+13 pechay
+14 cucumber
+15 potato
+16 labanos
+17 sayote
+18 tomato
+19 upo
+20 kangkong

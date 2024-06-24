@@ -38,9 +38,8 @@ class _VerificationState extends State<Verification> {
       child: const Text(
         'Resend Email',
         style: TextStyle(
-          // fontWeight: FontWeight.bold, // bold text
-          color: Colors.black, // Set text color to black
-          fontFamily: 'NanumGothic', // Custom Font
+          color: Colors.black,
+          fontFamily: 'NanumGothic',
         ),
       ),
       style: ButtonStyle(
@@ -51,10 +50,10 @@ class _VerificationState extends State<Verification> {
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide.none, // Remove the border
+            side: BorderSide.none,
           ),
         ),
-        elevation: MaterialStateProperty.all(2), // Add shadow
+        elevation: MaterialStateProperty.all(2),
       ),
     );
   }
@@ -74,7 +73,7 @@ class _VerificationState extends State<Verification> {
               child: Text(
                 'We have sent you an email',
                 style: TextStyle(
-                  fontFamily: 'NanumGothic', // Custom Font
+                  fontFamily: 'NanumGothic',
                   fontSize: 20,
                 ),
               ),

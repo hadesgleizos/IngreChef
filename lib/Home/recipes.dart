@@ -22,7 +22,7 @@ class _SavedRecipesPageState extends State<SavedRecipesPage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
-        Stream<List<String>> savedRecipeIds = DatabaseService().getSavedRecipeIds(user.uid);
+        List<String> savedRecipeIds = await DatabaseService().getSavedRecipeIds(user.uid);
         List<Recipes> savedRecipes = await DatabaseService().getRecipesByIds(savedRecipeIds);
         print('Fetched saved recipes: $savedRecipes');
         return savedRecipes;
