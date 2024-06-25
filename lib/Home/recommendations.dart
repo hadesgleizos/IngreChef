@@ -1,9 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:main/Database_Service.dart'; // Import the DatabaseService
-import 'package:main/fetchTest.dart'; // Import the Recipes class
-import 'package:main/Home/RecipeDetails.dart'; // Import the RecipeDetailPage
+import 'package:main/Database_Service.dart';
+import 'package:main/fetchTest.dart';
+import 'package:main/Home/RecipeDetails.dart';
 
 class RecommendationPage extends StatefulWidget {
   final List<String> scannedIngredients;
@@ -28,11 +27,11 @@ class _RecommendationPageState extends State<RecommendationPage> {
         stream: DatabaseService().getRecipes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("No recipes found."));
+            return const Center(child: Text("No recipes found."));
           }
 
           _recipes = snapshot.data!;
@@ -50,17 +49,22 @@ class _RecommendationPageState extends State<RecommendationPage> {
             itemBuilder: (context, index) {
               var recipe = recommendationList[index];
               return Card(
-                child: ListTile(
-                  title: Text(recipe.name),
-                  subtitle: Text(recipe.description),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecipeDetailPage(recipe: recipe),
-                      ),
-                    );
-                  },
+                child: Column(
+                  children: [
+                    Image.network(recipe.imageUrl),
+                    ListTile(
+                      title: Text(recipe.name),
+                      subtitle: Text(recipe.description),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeDetailPage(recipe: recipe),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               );
             },
@@ -77,7 +81,6 @@ class _RecommendationPageState extends State<RecommendationPage> {
       var similarity = calculateCosineSimilarity(
           scannedIngredients, recipe.scannables);
 
-      // Adjust the similarity threshold as needed (0.5 is just an example)
       if (similarity > 0.5) {
         recommendedRecipes.add(recipe);
       }

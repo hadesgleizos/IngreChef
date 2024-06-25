@@ -58,7 +58,7 @@ class RecipeDetailPage extends StatelessWidget {
                 'Instructions',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text(recipe.instructions),
+              Text('''${recipe.instructions}'''),
               SizedBox(height: 16),
               Text(
                 'Preparation Time: ${recipe.prepTime} minutes',

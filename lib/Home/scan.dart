@@ -15,49 +15,53 @@ class CameraView extends StatelessWidget {
         builder: (controller) {
           return controller.isCameraInitialized.value
               ? Stack(
+            fit: StackFit.expand,
             children: [
-              CameraPreview(controller.cameraController),
-              Obx(() => Positioned(
-                top: controller.y.value * MediaQuery.of(context).size.height,
-                left: controller.x.value * MediaQuery.of(context).size.width,
-                child: Container(
-                  width: controller.w.value * MediaQuery.of(context).size.width,
-                  height: controller.h.value * MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.white, width: 4.0),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Text(controller.label.value),
+              Center(
+                child: CameraPreview(controller.cameraController),
+              ),
+              Positioned(
+                top: 100.0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    color: Colors.white.withOpacity(0.5),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      controller.label.value,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              )),
+              ),
               Positioned(
                 bottom: 16.0,
-                right: 16.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    print('Scanned Ingredients: ${controller.ingredients}');
-                    // Navigate to RecommendationPage with scanned ingredients
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecommendationPage(
-                          scannedIngredients: controller.ingredients,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('Scanned Ingredients: ${controller.ingredients}');
+                      // Navigate to RecommendationPage with scanned ingredients
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecommendationPage(
+                            scannedIngredients: controller.ingredients,
+                          ),
                         ),
-                      ),
-                    );
+                      );
 
-                    // Dispose of the camera controller safely
-                    controller.disposeCameraController();
-                  },
-                  child: const Text("Done"),
+                      // Dispose of the camera controller safely
+                      controller.disposeCameraController();
+                    },
+                    child: const Text("Done"),
+                  ),
                 ),
               ),
             ],

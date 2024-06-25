@@ -35,9 +35,7 @@ class ScanController extends GetxController {
   }
 
   Future<void> initCamera() async {
-    if (await Permission.camera
-        .request()
-        .isGranted) {
+    if (await Permission.camera.request().isGranted) {
       // Get the list of all cameras
       cameras = await availableCameras();
 
@@ -75,7 +73,6 @@ class ScanController extends GetxController {
     }
   }
 
-
   Future<void> initTflite() async {
     try {
       await Tflite.loadModel(
@@ -104,21 +101,34 @@ class ScanController extends GetxController {
       );
 
       if (recognitions != null && recognitions.isNotEmpty) {
-        var recognition = recognitions.first;
-        var rect = recognition['rect'] ?? {};
+        // Filter recognitions with confidence >= 0.8
+        var validRecognitions = recognitions.where((recognition) {
+          return (recognition['confidence'] as double) >= 0.97;
+        }).toList();
 
-        x.value = rect['x'] ?? 0.0;
-        y.value = rect['y'] ?? 0.0;
-        w.value = rect['w'] ?? 1.0;
-        h.value = rect['h'] ?? 1.0;
+        if (validRecognitions.isNotEmpty) {
+          var recognition = validRecognitions.first;
+          var rect = recognition['rect'] ?? {};
 
-        var rawLabel = recognition['label'] ?? '';
-        var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
+          x.value = rect['x'] ?? 0.0;
+          y.value = rect['y'] ?? 0.0;
+          w.value = rect['w'] ?? 1.0;
+          h.value = rect['h'] ?? 1.0;
 
-        label.value = processedLabel;
+          var rawLabel = recognition['label'] ?? '';
+          var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
 
-        if (!ingredients.contains(processedLabel)) {
-          ingredients.add(processedLabel);
+          label.value = processedLabel;
+
+          if (!ingredients.contains(processedLabel)) {
+            ingredients.add(processedLabel);
+          }
+        } else {
+          x.value = 0.0;
+          y.value = 0.0;
+          w.value = 1.0;
+          h.value = 1.0;
+          label.value = '';
         }
       } else {
         x.value = 0.0;
