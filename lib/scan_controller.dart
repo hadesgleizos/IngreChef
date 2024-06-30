@@ -3,6 +3,9 @@ import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tflite/tflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'database_service.dart';
 
 class ScanController extends GetxController {
   late CameraController cameraController;
@@ -101,20 +104,11 @@ class ScanController extends GetxController {
       );
 
       if (recognitions != null && recognitions.isNotEmpty) {
-        // Filter recognitions with confidence >= 0.8
-        var validRecognitions = recognitions.where((recognition) {
-          return (recognition['confidence'] as double) >= 0.97;
-        }).toList();
+        var recognition = recognitions.first;
 
-        if (validRecognitions.isNotEmpty) {
-          var recognition = validRecognitions.first;
-          var rect = recognition['rect'] ?? {};
-
-          x.value = rect['x'] ?? 0.0;
-          y.value = rect['y'] ?? 0.0;
-          w.value = rect['w'] ?? 1.0;
-          h.value = rect['h'] ?? 1.0;
-
+        // Check confidence level
+        var confidence = recognition['confidence'] ?? 0.0;
+        if (confidence > 0.95) {
           var rawLabel = recognition['label'] ?? '';
           var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
 
@@ -124,17 +118,10 @@ class ScanController extends GetxController {
             ingredients.add(processedLabel);
           }
         } else {
-          x.value = 0.0;
-          y.value = 0.0;
-          w.value = 1.0;
-          h.value = 1.0;
+          // Confidence not met, reset values
           label.value = '';
         }
       } else {
-        x.value = 0.0;
-        y.value = 0.0;
-        w.value = 1.0;
-        h.value = 1.0;
         label.value = '';
       }
     } catch (e) {
@@ -158,6 +145,34 @@ class ScanController extends GetxController {
         cameraController.stopImageStream();
         cameraController.dispose();
       });
+    }
+  }
+
+  Future<void> logScan() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DocumentSnapshot studentDoc = await FirebaseFirestore.instance
+            .collection('Students')
+            .doc(user.uid)
+            .get();
+
+        if (studentDoc.exists) {
+          Map<String, dynamic> studentData = studentDoc.data() as Map<String, dynamic>;
+          String firstName = studentData['firstName'];
+          String lastName = studentData['lastName'];
+          String studentId = studentData['studentId'];
+
+          await DatabaseService().logScanData(firstName, lastName, studentId, ingredients);
+          print('Scan logged successfully.');
+        } else {
+          print('Student data not found for UID: ${user.uid}');
+        }
+      } else {
+        print('No user is logged in.');
+      }
+    } catch (e) {
+      print('Error logging scan data: $e');
     }
   }
 }

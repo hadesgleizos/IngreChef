@@ -10,30 +10,33 @@ class CameraView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Scan'),
+      ),
       body: GetBuilder<ScanController>(
         init: ScanController(),
         builder: (controller) {
           return controller.isCameraInitialized.value
               ? Stack(
-            fit: StackFit.expand,
             children: [
-              Center(
-                child: CameraPreview(controller.cameraController),
-              ),
-              Positioned(
-                top: 100.0,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    color: Colors.white.withOpacity(0.5),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      controller.label.value,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+              CameraPreview(controller.cameraController),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      color: Colors.white.withOpacity(0.5), // Semi-transparent background
+                      child: Obx(
+                            () => Text(
+                          controller.label.value,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -45,8 +48,10 @@ class CameraView extends StatelessWidget {
                 right: 0,
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       print('Scanned Ingredients: ${controller.ingredients}');
+                      // Log the scanned data
+                      await controller.logScan();
                       // Navigate to RecommendationPage with scanned ingredients
                       Navigator.pushReplacement(
                         context,

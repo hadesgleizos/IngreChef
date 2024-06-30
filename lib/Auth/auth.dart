@@ -22,11 +22,19 @@ class Auth {
     }
   }
 
-  Future<void> createUserWithEmailAndPassword({
+  Future<UserCredential> createUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    try {
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } catch (e) {
+      throw FirebaseAuthException(message: e.toString(), code: 'auth_error');
+    }
   }
 
   Future<void> sendPasswordResetEmail({

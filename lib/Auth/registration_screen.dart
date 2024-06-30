@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:main/Auth/auth.dart';
+import 'package:main/database_service.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -9,8 +10,13 @@ class Register extends StatefulWidget {
   State<Register> createState() => _RegisterState();
 }
 
+
 class _RegisterState extends State<Register> {
   String? errorMessage = '';
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _studentIdController = TextEditingController();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -24,10 +30,23 @@ class _RegisterState extends State<Register> {
 
   Future<void> createUserWithEmailAndPassword(BuildContext context) async {
     try {
-      await Auth().createUserWithEmailAndPassword(
+      // Create user with email and password
+      UserCredential userCredential = await Auth().createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      // Get the UID of the registered user
+      String uid = userCredential.user!.uid;
+
+      // Save user details to Firestore using DatabaseService
+      await DatabaseService().saveStudentDetails(
+        uid,
+        _firstNameController.text,
+        _lastNameController.text,
+        _studentIdController.text,
+      );
+
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -115,6 +134,12 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            _entryField('First Name', _firstNameController),
+            const SizedBox(height: 10),
+            _entryField('Last Name', _lastNameController),
+            const SizedBox(height: 10),
+            _entryField('Student ID', _studentIdController),
             const SizedBox(height: 20),
             _entryField('Email', _emailController),
             const SizedBox(height: 10),

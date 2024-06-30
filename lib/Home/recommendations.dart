@@ -41,30 +41,36 @@ class _RecommendationPageState extends State<RecommendationPage> {
           if (recommendationList.isEmpty) {
             return Center(
                 child: Text("No recipes match the scanned ingredients."));
-
           }
 
           return ListView.builder(
             itemCount: recommendationList.length,
             itemBuilder: (context, index) {
               var recipe = recommendationList[index];
-              return Card(
-                child: Column(
-                  children: [
-                    Image.network(recipe.imageUrl),
-                    ListTile(
-                      title: Text(recipe.name),
-                      subtitle: Text(recipe.description),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RecipeDetailPage(recipe: recipe),
-                          ),
-                        );
-                      },
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecipeDetailPage(recipe: recipe),
                     ),
-                  ],
+                  );
+                },
+                child: Card(
+                  child: Column(
+                    children: [
+                      Image.network(
+                        recipe.imageUrl,
+                        width: double.infinity, // Full width of the card
+                        height: 200, // Adjust height as needed
+                        fit: BoxFit.cover, // Cover the entire area allocated
+                      ),
+                      ListTile(
+                        title: Text(recipe.name),
+                        subtitle: Text(recipe.description),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -81,7 +87,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
       var similarity = calculateCosineSimilarity(
           scannedIngredients, recipe.scannables);
 
-      if (similarity > 0.5) {
+      if (similarity > 0.50) {
         recommendedRecipes.add(recipe);
       }
 

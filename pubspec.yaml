@@ -51,6 +51,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  image_path: "assets/images/ingreicon.jpg"
+  android: true
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,9 +77,10 @@ flutter:
      - assets/images/instagram.png
      - assets/images/photocamera.png
      - assets/model1.tflite
-     - assets/model.tflite
      - assets/labels(1).txt
-     - assets/labels.txt
+     - assets/detect.tflite
+     - assets/labelmap.txt
+
 
 
 

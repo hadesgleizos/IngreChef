@@ -3,15 +3,20 @@ import 'fetchTest.dart';
 
 const String USERS_COLLECTION_REF = "users";
 const String SAVED_RECIPES_FIELD = "savedRecipes";
+const String LOGS_COLLECTION_REF = "logs";
 
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference _recipesRef;
   late final CollectionReference _usersRef;
+  late final CollectionReference _logsRef;
+  final CollectionReference _studentsRef =
+  FirebaseFirestore.instance.collection('Students');
 
   DatabaseService() {
     _recipesRef = _firestore.collection("Recipes");
     _usersRef = _firestore.collection(USERS_COLLECTION_REF);
+    _logsRef = _firestore.collection('scans');
   }
 
   Stream<List<Recipes>> getRecipes() {
@@ -20,6 +25,22 @@ class DatabaseService {
         return Recipes.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     });
+  }
+
+  Future<void> saveStudentDetails(String userId, String firstName,
+      String lastName, String studentId) async {
+    try {
+      await _studentsRef.doc(userId).set({
+        'firstName': firstName,
+        'lastName': lastName,
+        'studentId': studentId,
+        // Add additional fields as needed
+      });
+      print('Student details saved successfully for $userId');
+    } catch (e) {
+      print('Error saving student details: $e');
+      throw e;
+    }
   }
 
   Future<void> saveRecipeId(String userId, String recipeId) async {
@@ -76,4 +97,21 @@ class DatabaseService {
       throw e;
     }
   }
+
+  Future<void> logScanData(String firstName, String lastName, String studentId,
+      List<String> ingredients) async {
+    try {
+      await _logsRef.add({
+        'firstName': firstName,
+        'lastName': lastName,
+        'studentId': studentId,
+        'timestamp': Timestamp.now(),
+        'ingredients': ingredients,
+      });
+      print('Scan logged successfully.');
+    } catch (e) {
+      print('Error logging scan: $e');
+    }
+  }
 }
+
