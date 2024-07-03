@@ -108,7 +108,7 @@ class ScanController extends GetxController {
 
         // Check confidence level
         var confidence = recognition['confidence'] ?? 0.0;
-        if (confidence > 0.95) {
+        if (confidence > 0.98) {
           var rawLabel = recognition['label'] ?? '';
           var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
 

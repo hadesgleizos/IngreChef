@@ -80,6 +80,9 @@ flutter:
      - assets/labels(1).txt
      - assets/detect.tflite
      - assets/labelmap.txt
+     - assets/model.tflite
+     - assets/best_float32.tflite
+     - assets/eggOnly.txt
 
 
 
