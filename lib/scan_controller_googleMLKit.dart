@@ -70,7 +70,7 @@ class ScanController extends GetxController {
 
   Future<void> initObjectDetector() async {
     print("Initializing object detector");
-    const modelPath = 'assets/object_labeler.tflite';
+    const modelPath = 'assets/best_float32.tflite';
     final options = LocalObjectDetectorOptions(
       mode: DetectionMode.single,
       classifyObjects: true,
