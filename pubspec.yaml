@@ -41,9 +41,13 @@ dependencies:
   cloud_firestore: ^4.15.8
   camera: ^0.10.5+9
   permission_handler: ^11.3.1
-  tflite: ^1.1.2
+#  tflite_flutter: ^0.10.4
+  google_mlkit_object_detection: ^0.10.0
   get: ^4.6.6
   image: ^4.2.0
+
+#dependency_overrides:
+#  image: ^3.2.0
 
 
 
@@ -76,13 +80,11 @@ flutter:
      - assets/images/camera.png
      - assets/images/instagram.png
      - assets/images/photocamera.png
-     - assets/model1.tflite
-     - assets/labels(1).txt
-     - assets/detect.tflite
-     - assets/labelmap.txt
+     - assets/workingModel.tflite
+     - assets/workingLabel.txt
+     - assets/latestLabel.txt
      - assets/model.tflite
      - assets/best_float32.tflite
-     - assets/eggOnly.txt
 
 
 

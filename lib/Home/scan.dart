@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main/scan_controller.dart';
+import 'package:main/scan_controller_googleMLKit.dart';
 import 'package:main/Home/recommendations.dart';
 
 class CameraView extends StatelessWidget {
