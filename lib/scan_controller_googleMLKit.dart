@@ -10,6 +10,7 @@
 // import 'package:main/database_service.dart';
 //
 // class ScanController extends GetxController {
+//
 //   late CameraController cameraController;
 //   late List<CameraDescription> cameras;
 //   var cameraCount = 0;

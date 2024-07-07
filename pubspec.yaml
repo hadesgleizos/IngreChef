@@ -39,13 +39,15 @@ dependencies:
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
-  camera: ^0.10.5+9
+#  camera: ^0.10.5+9
+  camera: ^0.9.8+1
   permission_handler: ^11.3.1
-#  google_mlkit_object_detection: ^0.13.0
-#  tflite_flutter: ^0.10.4
-  flutter_tflite: ^1.0.1
+  google_mlkit_object_detection: ^0.13.0
+#  tflite_flutter: ^0.9.0
+#  tflite_flutter_helper: ^0.2.1
+#  flutter_tflite: ^1.0.1
 #  tflite: 1.1.2
-#  flutter_vision: ^1.1.4
+  flutter_vision: ^1.1.4
   get: ^4.6.6
   image: ^4.2.0
 
@@ -89,6 +91,8 @@ flutter:
      - assets/model.tflite
      - assets/best_float32.tflite
      - assets/best_int8(1).tflite
+     - assets/yolov8n(1).tflite
+     - assets/labels(1).txt
 
 
 

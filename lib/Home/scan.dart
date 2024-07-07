@@ -1,13 +1,40 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main/scan_controller_old.dart';
+import 'package:main/scan_controller.dart';
 import 'package:main/Home/Recommendations.dart';
 
-class CameraView extends StatelessWidget {
-  const CameraView({Key? key}) : super(key: key);
-
-  @override
+class CameraView extends GetView<ScanController> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: GetBuilder<ScanController>(
+//         builder: (controller) {
+//           if (!controller.isCameraInitialized.value || controller.cameraController == null) {
+//             return Center(child: CircularProgressIndicator());
+//           }
+//           return Stack(
+//             children: [
+//               CameraPreview(controller.cameraController),
+//               Positioned(
+//                 bottom: 20,
+//                 left: 20,
+//                 child: Obx(() => Text(
+//                   'Detected: ${controller.label.value}',
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontSize: 24,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 )),
+//               ),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
