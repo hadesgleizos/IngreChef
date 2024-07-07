@@ -42,9 +42,10 @@ android {
     }
 
     aaptOptions {
-        noCompress 'tflite'
-        noCompress 'lite'
-        noCompress 'model.tflite'
+        noCompress "tflite"
+        noCompress "lite"
+        noCompress "model.tflite"
+        noCompress "best_float32.tflite"
     }
 
     kotlinOptions {

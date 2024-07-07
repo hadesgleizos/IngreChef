@@ -27,7 +27,7 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'This app provides users with a comprehensive set of tools for managing their recipes and scanning ingredients.',
+              'Ingre-Chef is a mobile application designed to assist culinary students by providing real-time ingredient detection and recipe recommendations. The app accurately identifies ingredients through your devices camera and suggests recipes based on the available ingredients. With secure user registration, personalized recipe collections, and comprehensive help resources, Ingre-Chef enhances the culinary learning experience.',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
@@ -56,7 +56,10 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+              'For inquiries, please refer to the provided email address and contact numbers.\n\n'
+                  'qcvafernando@tip.edu.manzano         +639150580952\n'
+                  'qogeronimo@tip.edu.ph                +639465436163\n'
+                  'qpagranada@tip.edu.ph                +639958560758',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),

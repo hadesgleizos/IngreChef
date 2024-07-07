@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'auth.dart';
+import 'Auth.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({super.key});

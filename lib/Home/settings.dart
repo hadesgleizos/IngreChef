@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:main/Auth/auth.dart';
-import 'package:main/Home/about.dart';
-import 'package:main/Home/help.dart';
+import 'package:main/Auth/Auth.dart';
+import 'package:main/Home/About.dart';
+import 'package:main/Home/Help.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});

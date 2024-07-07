@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:main/Home/recipes.dart';
+import 'package:main/Home/SavedRecipes.dart';
 import 'package:main/Home/scan.dart';
 import 'package:main/Home/settings.dart';
 
@@ -74,18 +74,18 @@ class MyHomePage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SavedRecipesPage(
-                                      )));
+                                  )));
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               const Color(0xFFF1F1F1)),
                           foregroundColor:
-                              MaterialStateProperty.all(Colors.black),
+                          MaterialStateProperty.all(Colors.black),
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.symmetric(
-                            horizontal: 32.0,
-                            vertical: 16.0,
-                          )),
+                                horizontal: 32.0,
+                                vertical: 16.0,
+                              )),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
@@ -97,7 +97,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                           elevation: MaterialStateProperty.all(0),
                           shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -131,12 +131,12 @@ class MyHomePage extends StatelessWidget {
                           backgroundColor: MaterialStateProperty.all(
                               const Color(0xFFF1F1F1)),
                           foregroundColor:
-                              MaterialStateProperty.all(Colors.black),
+                          MaterialStateProperty.all(Colors.black),
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.symmetric(
-                            horizontal: 48.0,
-                            vertical: 16.0,
-                          )),
+                                horizontal: 48.0,
+                                vertical: 16.0,
+                              )),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
@@ -148,7 +148,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                           elevation: MaterialStateProperty.all(0),
                           shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                          MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

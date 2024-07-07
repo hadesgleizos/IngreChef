@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import '../Auth/registration_screen.dart'; // Ensure this file exists
+import '../Auth/Register.dart'; // Ensure this file exists
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:main/Auth/auth.dart';
-import 'package:main/Auth/forgot.dart';
+import 'package:main/Auth/Auth.dart';
+import 'package:main/Auth/Forgot.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

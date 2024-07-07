@@ -1,8 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main/scan_controller_googleMLKit.dart';
-import 'package:main/Home/recommendations.dart';
+import 'package:main/scan_controller_old.dart';
+import 'package:main/Home/Recommendations.dart';
 
 class CameraView extends StatelessWidget {
   const CameraView({Key? key}) : super(key: key);

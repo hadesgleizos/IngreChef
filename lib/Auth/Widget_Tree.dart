@@ -1,7 +1,7 @@
-import 'package:main/Auth/auth.dart';
-import 'package:main/Home/home.dart';
+import 'package:main/Auth/Auth.dart';
+import 'package:main/Home/Home.dart';
 import 'package:flutter/material.dart';
-import 'package:main/Auth/login_screen.dart';
+import 'package:main/Auth/Login.dart';
 import 'Verification.dart';
 
 class testWidgetTree extends StatefulWidget {

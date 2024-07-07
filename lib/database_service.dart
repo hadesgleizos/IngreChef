@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'fetchTest.dart';
+import 'fetch_data.dart';
 
 const String USERS_COLLECTION_REF = "users";
 const String SAVED_RECIPES_FIELD = "savedRecipes";

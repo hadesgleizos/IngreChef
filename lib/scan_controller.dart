@@ -1,157 +1,208 @@
-// import 'package:flutter/material.dart';
+// import 'dart:async';
 // import 'package:camera/camera.dart';
-// import 'package:tflite_flutter/tflite_flutter.dart';
-// import 'package:image/image.dart' as img;
-// import 'dart:typed_data';
+// import 'package:get/get.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:main/database_service.dart';
+// import 'package:flutter_vision/flutter_vision.dart';
 //
-// class VegetableDetector extends StatefulWidget {
+// FlutterVision vision = FlutterVision();
+//
+// class ScanController extends GetxController {
+//   late CameraController cameraController;
+//   late List<CameraDescription> cameras;
+//   var cameraCount = 0;
+//   var isCameraInitialized = false.obs;
+//
+//   var x = 0.0.obs;
+//   var y = 0.0.obs;
+//   var w = 1.0.obs;
+//   var h = 1.0.obs;
+//   var label = ''.obs;
+//
+//   var ingredients = <String>[].obs;
+//
+//   var isDisposed = false;
+//   var isInterpreterBusy = false; // Added this flag
+//
 //   @override
-//   _VegetableDetectorState createState() => _VegetableDetectorState();
-// }
-//
-// class _VegetableDetectorState extends State<VegetableDetector> {
-//   late CameraController _cameraController;
-//   late Interpreter _interpreter;
-//   List<dynamic>? _recognitions;
-//   bool _isDetecting = false;
+//   void onInit() {
+//     super.onInit();
+//     debugLog('Initializing camera...');
+//     initCamera();
+//     debugLog('Initializing TFLite...');
+//     initTflite();
+//   }
 //
 //   @override
-//   void initState() {
-//     super.initState();
-//     _initializeCamera();
-//     _loadModel();
+//   void onClose() {
+//     debugLog('Disposing camera controller...');
+//     disposeCameraController();
+//     debugLog('Unloading TFLite model...');
+//     unloadModel();
+//     super.onClose();
 //   }
 //
-//   Future<void> _initializeCamera() async {
-//     final cameras = await availableCameras();
-//     final firstCamera = cameras.first;
-//     _cameraController = CameraController(
-//       firstCamera,
-//       ResolutionPreset.medium,
-//       enableAudio: false,
-//     );
-//     await _cameraController.initialize();
-//     if (!mounted) return;
-//     setState(() {});
-//     _cameraController.startImageStream(_processCameraImage);
-//   }
+//   Future<void> initCamera() async {
+//     debugLog('Requesting camera permission...');
+//     if (await Permission.camera.request().isGranted) {
+//       debugLog('Camera permission granted.');
+//       cameras = await availableCameras();
+//       debugLog('Available cameras: ${cameras.length}');
 //
-//   Future<void> _loadModel() async {
-//     _interpreter = await Interpreter.fromAsset('assets/your_model.tflite');
-//   }
+//       CameraDescription rearCamera = cameras.firstWhere(
+//             (camera) => camera.lensDirection == CameraLensDirection.back,
+//         orElse: () => cameras.first,
+//       );
 //
-//   void _processCameraImage(CameraImage image) {
-//     if (_isDetecting) return;
-//     _isDetecting = true;
-//     _detectVegetables(image);
-//   }
+//       cameraController = CameraController(
+//         rearCamera,
+//         ResolutionPreset.max,
+//       );
 //
-//   Future<void> _detectVegetables(CameraImage image) async {
-//     var inputImage = _preProcessImage(image);
-//     var outputShape = _interpreter.getOutputTensor(0).shape;
-//     var output = List.filled(outputShape.reduce((a, b) => a * b), 0.0).reshape(outputShape);
-//
-//     _interpreter.run(inputImage, output);
-//
-//     var results = _postProcessResults(output);
-//
-//     setState(() {
-//       _recognitions = results;
-//     });
-//
-//     _isDetecting = false;
-//   }
-//
-//   List<double> _preProcessImage(CameraImage image) {
-//     var img = _convertYUV420ToImage(image);
-//     var resizedImg = img.copyResize(width: 416, height: 416);
-//
-//     var inputBytes = Float32List(1 * 416 * 416 * 3);
-//     var inputTensor = inputBytes.buffer.asFloat32List();
-//
-//     for (var y = 0; y < resizedImg.height; y++) {
-//       for (var x = 0; x < resizedImg.width; x++) {
-//         var pixel = resizedImg.getPixel(x, y);
-//         inputTensor[(y * 416 + x) * 3] = pixel.r / 255.0;
-//         inputTensor[(y * 416 + x) * 3 + 1] = pixel.g / 255.0;
-//         inputTensor[(y * 416 + x) * 3 + 2] = pixel.b / 255.0;
+//       try {
+//         await cameraController.initialize();
+//         debugLog('Camera initialized.');
+//       } catch (e) {
+//         debugLog('Error initializing camera: $e');
+//         return;
 //       }
-//     }
 //
-//     return inputTensor;
+//       cameraController.startImageStream((CameraImage image) {
+//         if (isDisposed) return;
+//         cameraCount++;
+//         if (cameraCount % 10 == 0) {
+//           cameraCount = 0;
+//           runObjectDetection(image);
+//         }
+//         update();
+//       });
+//
+//       isCameraInitialized(true);
+//       update();
+//     } else {
+//       debugLog('Camera permission denied.');
+//     }
 //   }
 //
-//   img.Image _convertYUV420ToImage(CameraImage image) {
-//     final int width = image.width;
-//     final int height = image.height;
-//     final int uvRowStride = image.planes[1].bytesPerRow;
-//     final int uvPixelStride = image.planes[1].bytesPerPixel!;
+//   Future<void> initTflite() async {
+//     try {
+//       await vision.loadYoloModel(
+//           labels: 'assets/best_float32.txt',
+//           modelPath: 'assets/best_int8(1).tflite',
+//           modelVersion: "yolov5",
+//           quantization: true,
+//           numThreads: 1,
+//           useGpu: false
+//       );
+//       debugLog('TFLite model loaded.');
+//     } catch (e) {
+//       debugLog('Error loading TFLite model: $e');
+//     }
+//   }
 //
-//     var img = img.Image(width, height);
+//   Future<void> runObjectDetection(CameraImage image) async {
+//     if (isInterpreterBusy) {
+//       debugLog('Interpreter is busy, skipping this frame.');
+//       return;
+//     }
 //
-//     for (int x = 0; x < width; x++) {
-//       for (int y = 0; y < height; y++) {
-//         final int uvIndex = uvPixelStride * (x / 2).floor() + uvRowStride * (y / 2).floor();
-//         final int index = y * width + x;
+//     isInterpreterBusy = true;
 //
-//         final yp = image.planes[0].bytes[index];
-//         final up = image.planes[1].bytes[uvIndex];
-//         final vp = image.planes[2].bytes[uvIndex];
+//     try {
+//       debugLog('Running object detection...');
+//       var recognitions = await vision.yoloOnFrame(
+//           bytesList: image.planes.map((plane) => plane.bytes).toList(),
+//           imageHeight: image.height,
+//           imageWidth: image.width,
+//           iouThreshold: 0.4,
+//           confThreshold: 0.4,
+//           classThreshold: 0.5
+//       );
+//       debugLog('Recognitions: $recognitions');
 //
-//         int r = (yp + vp * 1436 / 1024 - 179).round().clamp(0, 255);
-//         int g = (yp - up * 46549 / 131072 + 44 - vp * 93604 / 131072 + 91).round().clamp(0, 255);
-//         int b = (yp + up * 1814 / 1024 - 227).round().clamp(0, 255);
+//       if (recognitions.isNotEmpty) {
+//         var recognition = recognitions.first;
+//         debugLog('First recognition: $recognition');
 //
-//         img.setPixelRgb(x, y, r, g, b);
+//         var confidence = recognition['confidence'] ?? 0.0;
+//         debugLog('Recognition confidence: $confidence');
+//
+//         if (confidence > 0.50) {
+//           var rawLabel = recognition['label'] ?? '';
+//           var processedLabel = rawLabel.replaceAll(RegExp(r'^\d+\s*'), '');
+//           label.value = processedLabel;
+//           debugLog('Processed label: $processedLabel');
+//
+//           if (!ingredients.contains(processedLabel)) {
+//             ingredients.add(processedLabel);
+//             debugLog('Added label to ingredients: $ingredients');
+//           }
+//         } else {
+//           label.value = '';
+//           debugLog('No confident recognition.');
+//         }
+//       } else {
+//         label.value = '';
+//         debugLog('No recognitions.');
 //       }
+//     } catch (e) {
+//       debugLog('Error running object detector: $e');
+//     } finally {
+//       isInterpreterBusy = false;
 //     }
-//
-//     return img;
 //   }
 //
-//   List<dynamic> _postProcessResults(List<dynamic> outputs) {
-//     // Implement post-processing logic here
-//     // This depends on your model's output format and requirements
-//     // You'll need to apply non-max suppression, threshold filtering, etc.
-//     // For simplicity, let's return a dummy result
-//     return [
-//       {
-//         'label': 'Carrot',
-//         'confidence': 0.95,
-//         'bbox': [10, 10, 100, 100],
-//       },
-//     ];
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     if (!_cameraController.value.isInitialized) {
-//       return Container();
+//   Future<void> unloadModel() async {
+//     try {
+//       await vision.closeYoloModel();
+//       debugLog('TFLite model unloaded.');
+//     } catch (e) {
+//       debugLog('Error closing TFLite model: $e');
 //     }
-//     return Column(
-//       children: [
-//         CameraPreview(_cameraController),
-//         if (_recognitions != null)
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: _recognitions!.length,
-//               itemBuilder: (context, index) {
-//                 var recognition = _recognitions![index];
-//                 return ListTile(
-//                   title: Text(recognition['label']),
-//                   subtitle: Text('Confidence: ${recognition['confidence']}'),
-//                 );
-//               },
-//             ),
-//           ),
-//       ],
-//     );
 //   }
 //
-//   @override
-//   void dispose() {
-//     _cameraController.dispose();
-//     _interpreter.close();
-//     super.dispose();
+//   void disposeCameraController() {
+//     isDisposed = true;
+//     if (cameraController.value.isInitialized) {
+//       Timer(Duration(seconds: 2), () {
+//         cameraController.stopImageStream();
+//         cameraController.dispose();
+//         debugLog('Camera controller disposed.');
+//       });
+//     }
+//   }
+//
+//   Future<void> logScan() async {
+//     try {
+//       User? user = FirebaseAuth.instance.currentUser;
+//       if (user != null) {
+//         DocumentSnapshot studentDoc = await FirebaseFirestore.instance
+//             .collection('Students')
+//             .doc(user.uid)
+//             .get();
+//
+//         if (studentDoc.exists) {
+//           Map<String, dynamic> studentData = studentDoc.data() as Map<String, dynamic>;
+//           String firstName = studentData['firstName'];
+//           String lastName = studentData['lastName'];
+//           String studentId = studentData['studentId'];
+//
+//           await DatabaseService().logScanData(firstName, lastName, studentId, ingredients);
+//           debugLog('Scan logged successfully.');
+//         } else {
+//           debugLog('Student data not found for UID: ${user.uid}');
+//         }
+//       } else {
+//         debugLog('No user is logged in.');
+//       }
+//     } catch (e) {
+//       debugLog('Error logging scan data: $e');
+//     }
+//   }
+//
+//   void debugLog(String message) {
+//     print('[DEBUG] $message');
 //   }
 // }
